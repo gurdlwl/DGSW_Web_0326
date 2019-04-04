@@ -38,6 +38,4 @@ public class UserController {
         return this.userService.delUser(id);
     }
 
-
-
 }

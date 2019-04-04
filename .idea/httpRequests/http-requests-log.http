@@ -1,0 +1,513 @@
+POST http://localhost:8080/insultUser
+Content-Type: application/json
+
+{
+ "username" : "ASdfasdfa",
+  "email" : "asdaaaf@asdfa"
+}
+
+<> 2019-04-04T012731.200.json
+
+###
+
+POST http://localhost:8080/init
+Content-Type: application/json
+
+{
+ "username" : "ASdfasdfa",
+  "email" : "asdaaaf@asdfa"
+}
+
+<> 2019-04-04T012622.404.json
+
+###
+
+GET http://localhost:8080/list
+Accept: application/json
+
+<> 2019-04-03T083950.200.json
+
+###
+
+GET http://localhost:8080/list
+Accept: application/json
+
+<> 2019-04-03T083939.200.json
+
+###
+
+GET http://localhost:8080/list
+Accept: application/json
+
+<> 2019-04-02T053352.200.json
+
+###
+
+GET http://localhost:8080/list
+Accept: application/json
+
+<> 2019-04-02T053105.200.json
+
+###
+
+PUT http://localhost:8080/update/2
+Content-Type: application/json
+
+{
+  "userId" : 1,
+  "content" : "bbb@gmail.com"
+}
+
+<> 2019-04-02T053102.200.json
+
+###
+
+GET http://localhost:8080/list
+Accept: application/json
+
+<> 2019-04-02T052934.200.json
+
+###
+
+GET http://localhost:8080/list
+Accept: application/json
+
+<> 2019-04-02T030055.200.json
+
+###
+
+GET http://localhost:8080/list
+Accept: application/json
+
+<> 2019-04-02T030017.200.json
+
+###
+
+PUT http://localhost:8080/update/2
+Content-Type: application/json
+
+{
+  "userId" : 1,
+  "content" : "bbb@gmail.com"
+}
+
+<> 2019-04-02T030015.200.json
+
+###
+
+GET http://localhost:8080/list
+Accept: application/json
+
+<> 2019-04-02T030008.200.json
+
+###
+
+PUT http://localhost:8080/update/2
+Content-Type: application/json
+
+{
+  "userId" : 1,
+  "content" : "bbb@gmail.com"
+}
+
+<> 2019-04-02T025422.200.json
+
+###
+
+PUT http://localhost:8080/update/2
+Content-Type: application/json
+
+{
+  "content" : "bbb@gmail.com"
+}
+
+<> 2019-04-02T025405.500.json
+
+###
+
+GET http://localhost:8080/list
+Accept: application/json
+
+<> 2019-04-02T025344.200.json
+
+###
+
+PUT http://localhost:8080/update/1
+Content-Type: application/json
+
+{
+  "content" : "bbb@gmail.com"
+}
+
+###
+
+PUT http://localhost:8080/update/1
+Content-Type: application/json
+
+{
+  "username" : "aaa",
+  "content" : "bbb@gmail.com"
+}
+
+###
+
+PUT http://localhost:8080/update/1
+Content-Type: application/json
+
+{
+  "username" : "aaa",
+  "content" : "bbb@gmail.com"
+}
+
+###
+
+PUT http://localhost:8080/update/1
+Content-Type: application/json
+
+{
+  "username" : "aaa",
+  "email" : "bbb@gmail.com"
+}
+
+###
+
+PUT http://localhost:8080/update/1
+Content-Type: application/json
+
+{
+  "username" : "aaa",
+  "content" : "bbb@gmail.com"
+}
+
+###
+
+GET http://localhost:8080/list
+Accept: application/json
+
+<> 2019-04-02T025136.200.json
+
+###
+
+PUT http://localhost:8080/update/1
+Content-Type: application/json
+
+{
+  "username" : "aaa",
+  "content" : "bbb@gmail.com"
+}
+
+###
+
+PUT http://localhost:8080/update/1
+Content-Type: application/json
+
+{
+  "username" : "bbb",
+  "email" : "bbb@gmail.com"
+}
+
+###
+
+POST http://localhost:8080/insert
+Content-Type: application/json
+
+{
+  "userId" : 1,
+  "content" : "hello4fffff"
+}
+
+<> 2019-04-02T021849.200.json
+
+###
+
+POST http://localhost:8080/insert
+Content-Type: application/json
+
+{
+  "userId" : 1,
+  "content" : "hello4"
+}
+
+<> 2019-04-02T021841.200.json
+
+###
+
+POST http://localhost:8080/insert
+Content-Type: application/json
+
+{
+  "id" : 6,
+  "userId" : 1,
+  "content" : "hello4",
+  "username" : "aaa"
+}
+
+<> 2019-04-02T021713.200.json
+
+###
+
+POST http://localhost:8080/insert
+Content-Type: application/json
+
+{
+  "id" : 6,
+  "userId" : 2,
+  "content" : "hello4",
+  "username" : "aaa"
+}
+
+<> 2019-04-02T021612.200.json
+
+###
+
+POST http://localhost:8080/insert
+Content-Type: application/json
+
+{
+  "userId" : 2,
+  "content" : "hello4",
+  "username" : "aaa"
+}
+
+<> 2019-04-02T013441.200.json
+
+###
+
+POST http://localhost:8080/insert
+Content-Type: application/json
+
+{
+  "userId" : 2,
+  "content" : "hello4",
+  "username" : "aaa"
+}
+
+<> 2019-04-02T013440.200.json
+
+###
+
+POST http://localhost:8080/insert
+Content-Type: application/json
+
+{
+  "userId" : 2,
+  "content" : "hello4",
+  "username" : "aaa"
+}
+
+<> 2019-04-02T013437.200.json
+
+###
+
+POST http://localhost:8080/insert
+Content-Type: application/json
+
+{
+  "id": 7,
+  "userId" : 2,
+  "content" : "hello4",
+  "username" : "aaa"
+}
+
+<> 2019-04-02T013430.200.json
+
+###
+
+POST http://localhost:8080/insert
+Content-Type: application/json
+
+{
+  "id": 7,
+  "userId" : 2,
+  "content" : "hello4",
+  "username" : "aaa"
+}
+
+<> 2019-04-02T013324.200.json
+
+###
+
+POST http://localhost:8080/insert
+Content-Type: application/json
+
+{
+  "id": 7,
+  "userId" : 2,
+  "content" : "hello4",
+  "username" : "aaa"
+}
+
+<> 2019-04-02T013144.200.json
+
+###
+
+POST http://localhost:8080/insert
+Content-Type: application/json
+
+{
+  "id": 7,
+  "userId" : 2,
+  "content" : "hello4",
+  "username" : "aaa"
+}
+
+<> 2019-04-02T012920.200.json
+
+###
+
+POST http://localhost:8080/insert
+Content-Type: application/json
+
+{
+  "id": 7,
+  "userId" : 2,
+  "content" : "hello4",
+  "username" : "aaa"
+}
+
+<> 2019-04-01T033116.200.json
+
+###
+
+POST http://localhost:8080/insert
+Content-Type: application/json
+
+{
+  "id": 6,
+  "userId" : 2,
+  "content" : "hello4",
+  "username" : "5555"
+}
+
+<> 2019-04-01T033058.200.json
+
+###
+
+GET http://localhost:8080/list
+Accept: application/json
+
+<> 2019-04-01T033053.200.json
+
+###
+
+POST http://localhost:8080/insert
+Content-Type: application/json
+
+{
+  "id": 5,
+  "userId" : 2,
+  "content" : "hello4",
+  "username" : "111111111"
+}
+
+<> 2019-04-01T033031.200.json
+
+###
+
+POST http://localhost:8080/init
+Content-Type: application/json
+
+{
+ "username" : "ASdfasdfa",
+  "email" : "asdaaaf@asdfa"
+}
+
+<> 2019-04-01T033027.404.json
+
+###
+
+POST http://localhost:8080/insert
+Content-Type: application/json
+
+{
+  "id": 5,
+  "userId" : 2,
+  "content" : "hello4",
+  "username" : "111111111"
+}
+
+<> 2019-04-01T032854.200.json
+
+###
+
+POST http://localhost:8080/insert
+Content-Type: application/json
+
+{
+  "id": 5,
+  "userId" : 2,
+  "content" : "hello4",
+  "username" : "asdf"
+}
+
+<> 2019-04-01T032452.200.json
+
+###
+
+POST http://localhost:8080/insert
+Content-Type: application/json
+
+{
+  "id": 5,
+  "userId" : 2,
+  "content" : "hello4",
+  "username" : "asdf"
+}
+
+<> 2019-04-01T023131.200.json
+
+###
+
+GET http://localhost:8080/list
+Accept: application/json
+
+<> 2019-04-01T023046.200.json
+
+###
+
+GET http://localhost:8080/list
+Accept: application/json
+
+<> 2019-04-01T014002.200.json
+
+###
+
+GET http://localhost:8080/list
+Accept: application/json
+
+###
+
+GET http://localhost:8080/list
+Accept: application/json
+
+###
+
+GET http://localhost:8080/list
+Accept: application/json
+
+###
+
+GET http://localhost:8080/list
+Accept: application/json
+
+###
+
+GET http://localhost:8080/listUser
+Accept: application/json
+
+<> 2019-03-27T095239.200.json
+
+###
+
+PUT http://localhost:8080/update/1
+Content-Type: application/json
+
+{
+  "username" : "bbb",
+  "email" : "bbb@gmail.com"
+}
+
+<> 2019-03-27T095237.200.json
+
+###
+

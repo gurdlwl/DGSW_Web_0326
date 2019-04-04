@@ -1,8 +1,6 @@
 package kr.hs.dgsw.web_0326.Service;
 
 import kr.hs.dgsw.web_0326.Domain.User;
-import kr.hs.dgsw.web_0326.Protocol.CommentUsernameProtocol;
-import kr.hs.dgsw.web_0326.Repository.CommentRepository;
 import kr.hs.dgsw.web_0326.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -56,5 +54,4 @@ public class UserServiceImpl implements UserService {
             return false;
         }
     }
-    // 유저 수정
 }

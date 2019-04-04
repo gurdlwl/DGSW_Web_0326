@@ -25,7 +25,7 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost:8080/init
+POST http://localhost:8080/insultUser
 Content-Type: application/json
 
 {
