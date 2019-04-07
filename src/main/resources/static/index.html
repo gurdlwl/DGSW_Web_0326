@@ -9,36 +9,36 @@
             crossorigin="anonymous"></script>
 </head>
 <body>
-    <h3>User</h3>
-    <div>
-        <input id="userName" placeholder="이름">
-        <input id="userEmail" placeholder="이메일">
-        <button onclick="addUser()">추가</button>
-    </div>
-    <div id="user-list"></div>
+<h3>User</h3>
+<div>
+    <input id="userName" placeholder="이름">
+    <input id="userEmail" placeholder="이메일">
+    <button onclick="addUser()">추가</button>
+</div>
+<div id="user-list"></div>
 
-    <hr style="border : 2px solid black;">
-    <h3>Comment</h3>
-    <div>
-        <input type="file" id="upload-file"> <!-- multiple로 여러개 가능 -->
-        <button onclick="uploadFile()">파일업로드</button>
+<hr style="border : 2px solid black;">
+<h3>Comment</h3>
+<div>
+    <input type="file" id="upload-file"> <!-- multiple로 여러개 가능 -->
+    <button onclick="uploadFile()">파일업로드</button>
     <div>
         <input id="new-content" style="width:450px" placeholder="게시글 내용">
         <button onclick="addComment()">확인</button>
     </div>
-    </div>
-    <div id="comments-list"></div>
+</div>
+<div id="comments-list"></div>
 
-    <script>
-        let content = null;
+<script>
+    let content = null;
 
-        async function getCommentList(){
-            try{
-                let response = await $.get('/list');
+    async function getCommentList() {
+        try {
+            let response = await $.get('/list');
 
-                for(let i = 0;i < response.length; i++){
-                    let comment = response[i];
-                    $('#comments-list').append(`
+            for (let i = 0; i < response.length; i++) {
+                let comment = response[i];
+                $('#comments-list').append(`
                 <div id="line${comment.id}" style="display: flex; border-bottom: 1px solid silver">
                     <div style="width: 150px;">${comment.username}</div>
                     <div style="width: 350px;">${comment.content}</div>
@@ -46,26 +46,27 @@
                     <button onclick="remove(this, ${comment.id})">삭제</button></div>
                 </div>
                 `);
-                }
-            }catch (err) {
-                $('#comments-list').html(JSON.stringify(err));
             }
+        } catch (err) {
+            $('#comments-list').html(JSON.stringify(err));
         }
-        getCommentList();
-        
-        async function addComment() {
-            try{
-                let newContent = {
-                    userId: 1,
-                    content: $('#new-content').val()
-                };
-                let response = await $.ajax({
-                    type: 'POST',
-                    url: '/insert',
-                    contentType: 'application/json',
-                    data: JSON.stringify(newContent)
-                });
-                $('#comments-list').append(`
+    }
+
+    getCommentList();
+
+    async function addComment() {
+        try {
+            let newContent = {
+                userId: 1,
+                content: $('#new-content').val()
+            };
+            let response = await $.ajax({
+                type: 'POST',
+                url: '/insert',
+                contentType: 'application/json',
+                data: JSON.stringify(newContent)
+            });
+            $('#comments-list').append(`
                     <div id="line${response.id}" style="display: flex; border-bottom: 1px solid silver">
                         <div style="width: 150px;">${response.username}</div>
                         <div style="width: 350px;">${response.content}</div>
@@ -75,161 +76,187 @@
                         </div>
                     </div>
                 `);
-            } catch(err) {
-                console.log(JSON.stringify(err));
-            }
+        } catch (err) {
+            console.log(JSON.stringify(err));
         }
+    }
 
-        async function editComment(button, id) {
-            if ($(button).text() === '수정') {
-                let line = $(`#line${id}`);
-                content = line.find('div:nth-child(2)').html();
-                let input = `<input value="${content}">`
-                line.find('div:nth-child(2)').html(input);
+    async function editComment(button, id) {
+        if ($(button).text() === '수정') {
+            let line = $(`#line${id}`);
+            content = line.find('div:nth-child(2)').html();
+            let input = `<input value="${content}">`
+            line.find('div:nth-child(2)').html(input);
 
-                $(button).text('확인');
-                $(button).next().text('취소');
-            } else {
-                let line = $(`#line${id}`);
+            $(button).text('확인');
+            $(button).next().text('취소');
+        } else {
+            let line = $(`#line${id}`);
 
-                let updateContent = {
-                    userId: "1",
-                    content: line.find('div:nth-child(2)').children().val()
-                };
+            let updateContent = {
+                userId: "1",
+                content: line.find('div:nth-child(2)').children().val()
+            };
+            let response = await $.ajax({
+                type: 'PUT',
+                url: '/update/' + id,
+                contentType: 'application/json',
+                data: JSON.stringify(updateContent)
+            });
+            line.find('div:nth-child(2)').html(response.content);
+
+            $(button).text('수정');
+            $(button).next().text('삭제');
+        }
+    }
+
+    async function remove(button, id) {
+        if ($(button).text() === '삭제') {
+            try {
                 let response = await $.ajax({
-                    type: 'PUT',
-                    url: '/update/' + id,
-                    contentType: 'application/json',
-                    data: JSON.stringify(updateContent)
+                    type: 'DELETE',
+                    url: '/delComment/' + id,
+                    contentType: 'application/json'
                 });
-                line.find('div:nth-child(2)').html(response.content);
-
-                $(button).text('수정');
-                $(button).next().text('삭제');
+                if (response === true)
+                    $(`#line${id}`).remove();
+                else
+                    alert("삭제하지 못했습니다");
+            } catch (err) {
+                console.log(err);
             }
+        } else {
+            $(button).text('삭제');
+            $(button).prev().text('수정');
+            $(`#line${id}`).find('div:nth-child(2)').html(content)
+        }
+    }
+
+    async function uploadFile() {
+        let file = await $('#upload-file')[0].files[0];
+
+        if (file == null) {
+            alert("파일을 첨부해주세요.f");
+            return;
         }
 
-        async function remove(button, id){
-            if($(button).text() === '삭제'){
-                try{
-                    let response = await $.ajax({
-                        type: 'DELETE',
-                        url: '/delComment/' + id,
-                        contentType: 'application/json'
-                    });
-                    if(response === true)
-                        $(`#line${id}`).remove();
-                    else
-                        alert("삭제하지 못했습니다");
-                }catch(err){
-                    console.log(err);
-                }
-            } else {
-                $(button).text('삭제');
-                $(button).prev().text('수정');
-                $(`#line${id}`).find('div:nth-child(2)').html(content)
-            }
+        try {
+            let formData = new FormData();
+            formData.append('srcFile', file);
+
+            let response = $.ajax({
+                type: 'POST',
+                url: '/attachment',
+                data: formData,
+                processData: false,
+                contentType: false
+            });
+            console.log(JSON.stringify(response));
+            alert("업로드 성공");
+        } catch (err) {
+            console.log(JSON.stringify(err));
+            alert("업로드 실패");
+        }
+    }
+
+    async function uploadProfile(button, username, id) {
+        let file = await $('#upload-profile')[0].files[0];
+
+        if (file == null) {
+            alert("파일을 첨부해주세요.");
+            return;
         }
 
-        async function uploadFile(){
-            let file = await $('#upload-file')[0].files[0];
+        let formData = new FormData();
+        formData.append('srcFile', file);
 
-            if(file == null){
-                alert("파일을 첨부해주세요.f");
-                return;
-            }
+        $.ajax({
+            type: 'POST',
+            url: '/profile/' + username,
+            data: formData,
+            processData: false,
+            contentType: false,
+        }).done(function (response) {
+            let line = $(`#line${id}`);
 
-            try{
-                let formData = new FormData();
-                formData.append('srcFile', file);
-                let response = $.ajax({
-                    type : 'POST',
-                    url : '/attachment',
-                    data : formData,
-                    processData : false,
-                    contentType : false
-                });
-                console.log(JSON.stringify(response));
-                alert("업로드 성공");
-            } catch(err){
+            let user = {
+                username: line.find("div:nth-child(1)").text(),
+                email: line.find("div:nth-child(2)").text(),
+                path: response.storedPath,
+                filename: response.originalName
+            };
+
+            $.ajax({
+                type: 'PUT',
+                url: '/updateUser/' + id,
+                contentType: 'application/json',
+                data: JSON.stringify(user)
+            }).done(function (res) {
+                line.find("div:nth-child(3)").html(response.storedPath);
+                line.find("div:nth-child(4)").html(response.originalName);
+            }).fail(function (err){
                 console.log(JSON.stringify(err));
-                alert("업로드 실패");
-            }
+                alert("업데이트 실패");
+            });
+            console.log(JSON.stringify(response));
+            alert("업로드 성공");
+        }).fail(function (err) {
+            console.log(JSON.stringify(err));
+            alert("업로드 실패");
+        });
+    }
 
-        }
+    async function getUserList() {
+        try {
+            let response = await $.get('/listUser');
 
-        async function uploadProfile(button, username){
-            let file = await $('#upload-profile')[0].files[0];
+            for (let i = 0; i < response.length; i++) {
+                let user = response[i];
 
-            if(file == null){
-                alert("파일을 첨부해주세요.");
-                return;
-            }
-
-            try{
-                let formData = new FormData();
-                formData.append('srcFile', file);
-                let response = $.ajax({
-                    type : 'POST',
-                    url : '/profile/' + username,
-                    data : formData,
-                    processData : false,
-                    contentType : false
-                });
-                console.log(JSON.stringify(response));
-                alert("업로드 성공");
-            } catch(err){
-                console.log(JSON.stringify(err));
-                alert("업로드 실패");
-            }
-        }
-
-        async function getUserList(){
-            try{
-                let response = await $.get('/listUser');
-
-                for(let i = 0; i < response.length; i++){
-                    let user = response[i];
-
-                    $('#user-list').append(`
+                $('#user-list').append(`
                     <div id="line${user.id}" style="display: flex; border-bottom: 1px solid silver">
-                        <div style="width: 150px;">${user.username}</div>
-                        <div style="width: 200px;">${user.email}</div>
-                        <div style="width: 600px;">
+                        <div style="width: 100px;">${user.username}</div>
+                        <div style="width: 150px;">${user.email}</div>
+                        <div style="width: 550px;">${user.path}</div>
+                        <div style="width: 150px;">${user.filename}</div>
+                        <div style="width: 400px;">
                             <input type="file" id="upload-profile">
-                            <button onclick="uploadProfile(this, '${user.username}')">파일 업로드</button>
+                            <button onclick="uploadProfile(this, '${user.username}', ${user.id})">파일 업로드</button>
                         </div>
                         <div>
                             <button onclick="removeUser(this, ${user.id})">삭제</button>
                         </div>
                     </div>
                     `);
-                }
-            } catch(err) {
-                $('#user-list').html(JSON.stringify(err));
             }
+        } catch (err) {
+            $('#user-list').html(JSON.stringify(err));
         }
-        getUserList();
-        
-        async function addUser(){
-            try{
-                let newUser = {
-                    username : $('#userName').val(),
-                    email : $('#userEmail').val()
-                };
+    }
 
-                let response = await $.ajax({
-                    type: 'POST',
-                    url: '/insultUser',
-                    contentType: 'application/json',
-                    data: JSON.stringify(newUser)
-                });
+    getUserList();
 
-                $('#user-list').append(`
+    async function addUser() {
+        try {
+            let newUser = {
+                username: $('#userName').val(),
+                email: $('#userEmail').val()
+            };
+
+            let response = await $.ajax({
+                type: 'POST',
+                url: '/insultUser',
+                contentType: 'application/json',
+                data: JSON.stringify(newUser)
+            });
+
+            $('#user-list').append(`
                     <div id="line${response.id}" style="display: flex; border-bottom: 1px solid silver">
-                        <div style="width: 150px;">${response.username}</div>
-                        <div style="width: 200px;">${response.email}</div>
-                        <div style="width: 600px;">
+                        <div style="width: 100px;">${response.username}</div>
+                        <div style="width: 150px;">${response.email}</div>
+                        <div style="width: 550px;">${response.path}</div>
+                        <div style="width: 150px;">${response.filename}</div>
+                        <div style="width: 400px;">
                             <input type="file" id="upload-profile">
                             <button onclick="uploadProfile(this, ${response.username})">파일 업로드</button>
                         </div>
@@ -238,29 +265,29 @@
                         </div>
                     </div>
                 `)
+        } catch (err) {
+            console.log(JSON.stringify(err));
+        }
+    }
+
+    async function removeUser(button, id) {
+        if ($(button).text() === '삭제') {
+            try {
+                let response = await $.ajax({
+                    type: 'DELETE',
+                    url: '/delUser/' + id,
+                    contentType: 'application/json'
+                });
+                if (response === true)
+                    $(`#line${id}`).remove();
+                else
+                    alert("삭제하지 못했습니다");
             } catch (err) {
-                console.log(JSON.stringify(err));
+                console.log(err);
             }
         }
-        
-        async function removeUser(button, id) {
-            if($(button).text() === '삭제'){
-                try{
-                    let response = await $.ajax({
-                        type: 'DELETE',
-                        url: '/delUser/' + id,
-                        contentType: 'application/json'
-                    });
-                    if(response === true)
-                        $(`#line${id}`).remove();
-                    else
-                        alert("삭제하지 못했습니다");
-                }catch(err){
-                    console.log(err);
-                }
-            }
-        }
-        
-    </script>
+    }
+
+</script>
 </body>
 </html>

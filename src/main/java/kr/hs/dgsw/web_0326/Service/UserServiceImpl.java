@@ -39,6 +39,8 @@ public class UserServiceImpl implements UserService {
             User u = found.get();
             u.setEmail(user.getEmail());
             u.setUsername(user.getUsername());
+            u.setPath(user.getPath());
+            u.setFilename(user.getFilename());
 
             return this.userRepository.save(u);
         }
