@@ -1,3 +1,10 @@
+GET http://localhost:8080/listUser
+Accept: application/json
+
+<> 2019-04-05T010734.200.json
+
+###
+
 POST http://localhost:8080/insultUser
 Content-Type: application/json
 
@@ -496,18 +503,6 @@ GET http://localhost:8080/listUser
 Accept: application/json
 
 <> 2019-03-27T095239.200.json
-
-###
-
-PUT http://localhost:8080/update/1
-Content-Type: application/json
-
-{
-  "username" : "bbb",
-  "email" : "bbb@gmail.com"
-}
-
-<> 2019-03-27T095237.200.json
 
 ###
 

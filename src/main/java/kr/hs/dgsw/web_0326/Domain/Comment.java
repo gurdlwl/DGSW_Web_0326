@@ -1,6 +1,5 @@
 package kr.hs.dgsw.web_0326.Domain;
 
-import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;

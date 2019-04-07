@@ -25,6 +25,8 @@ public class User {
     @UpdateTimestamp
     private LocalDateTime modified;
 
+    private String path;
+
     public User(String username, String email){
         this.username = username;
         this.email = email;

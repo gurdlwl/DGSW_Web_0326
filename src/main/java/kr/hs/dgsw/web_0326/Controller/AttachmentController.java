@@ -1,10 +1,7 @@
 package kr.hs.dgsw.web_0326.Controller;
 
 import kr.hs.dgsw.web_0326.Protocol.AttachmentProtocol;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -33,12 +30,12 @@ public class AttachmentController {
         }
     }
 
-    @PostMapping("/profile")
-    public AttachmentProtocol uploadProfile(@RequestBody MultipartFile srcFile){
+    @PostMapping("/profile/{username}")
+    public AttachmentProtocol uploadProfile(@PathVariable String username, @RequestPart MultipartFile srcFile){
 
         String profileDestFilename
                 = "C:\\Users\\ijh0329\\IdeaProjects\\web_0326\\profile\\"
-                + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd/"))
+                + username + "\\"
                 + UUID.randomUUID().toString() + "_"
                 + srcFile.getOriginalFilename();
 

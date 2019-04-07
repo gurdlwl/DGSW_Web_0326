@@ -11,10 +11,6 @@
 <body>
     <h3>User</h3>
     <div>
-        <input type="file" id="upload-profile">
-        <button onclick="uploadProfile()">파일 업로드</button>
-    </div>
-    <div>
         <input id="userName" placeholder="이름">
         <input id="userEmail" placeholder="이메일">
         <button onclick="addUser()">추가</button>
@@ -136,8 +132,14 @@
         }
 
         async function uploadFile(){
+            let file = await $('#upload-file')[0].files[0];
+
+            if(file == null){
+                alert("파일을 첨부해주세요.f");
+                return;
+            }
+
             try{
-                let file = $('#upload-file')[0].files[0];
                 let formData = new FormData();
                 formData.append('srcFile', file);
                 let response = $.ajax({
@@ -156,14 +158,20 @@
 
         }
 
-        async function uploadProfile(){
+        async function uploadProfile(button, username){
+            let file = await $('#upload-profile')[0].files[0];
+
+            if(file == null){
+                alert("파일을 첨부해주세요.");
+                return;
+            }
+
             try{
-                let file = $('#upload-profile')[0].files[0];
                 let formData = new FormData();
                 formData.append('srcFile', file);
                 let response = $.ajax({
                     type : 'POST',
-                    url : '/profile',
+                    url : '/profile/' + username,
                     data : formData,
                     processData : false,
                     contentType : false
@@ -187,7 +195,10 @@
                     <div id="line${user.id}" style="display: flex; border-bottom: 1px solid silver">
                         <div style="width: 150px;">${user.username}</div>
                         <div style="width: 200px;">${user.email}</div>
-                        <div style="width: 600px;">프로필 사진 Path</div>
+                        <div style="width: 600px;">
+                            <input type="file" id="upload-profile">
+                            <button onclick="uploadProfile(this, '${user.username}')">파일 업로드</button>
+                        </div>
                         <div>
                             <button onclick="removeUser(this, ${user.id})">삭제</button>
                         </div>
@@ -218,7 +229,10 @@
                     <div id="line${response.id}" style="display: flex; border-bottom: 1px solid silver">
                         <div style="width: 150px;">${response.username}</div>
                         <div style="width: 200px;">${response.email}</div>
-                        <div style="width: 600px;">프로필 사진 Path</div>
+                        <div style="width: 600px;">
+                            <input type="file" id="upload-profile">
+                            <button onclick="uploadProfile(this, ${response.username})">파일 업로드</button>
+                        </div>
                         <div>
                             <button onclick="removeUser(this, ${response.id})">삭제</button>
                         </div>
