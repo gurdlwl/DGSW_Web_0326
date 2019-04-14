@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script
+            src="http://code.jquery.com/jquery-3.3.1.js"
+            integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+            crossorigin="anonymous"></script>
+
+    <style>
+        body {
+            margin: 0
+        }
+
+        header {
+            height: 100px;
+            text-align: center;
+            align-items: center;
+            font-size: 40px;
+            font-weight: bolder;
+            color: white;
+            background-color: #9999CC;
+        }
+
+        section {
+            position: absolute;
+            align-items: center;
+            text-align: center;
+            top: 100px;
+            bottom: 0;
+            left: 0;
+            right: 200px;
+            background-color: white;
+        }
+
+        aside {
+            position: absolute;
+            width: 200px;
+            top: 100px;
+            right: 0;
+            bottom: 0;
+            background-color: #9999CC;
+        }
+
+        button {
+            background-color: white;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 10px;
+        }
+
+        #commentImg {
+            margin: 10px;
+            max-width: 25vw;
+            width: auto;
+            height: auto;
+        }
+
+        #profileImg{
+            margin: 10px;
+            max_width: 1vw;
+            width: auto;
+            height: auto;
+        }
+
+        #newContent-container, #login-container {
+            display: none;
+            position: fixed;
+            justify-content: center;
+            align-items: center;
+            background-color: #000000aa;
+            left: 0;
+            top: 0;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        #newContent-container-child, #login-container-child {
+            text-align: center;
+            background-color: white;
+            position: relative;
+            height: 300px;
+            width: 400px;
+            padding-top: 100px;
+        }
+
+        .list {
+            display: inline-block;
+            margin-top: 15px;
+            margin-bottom: 15px;
+            border: 1px solid black;
+            width: 50%;
+        }
+
+        #comments-list {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<header>
+    DGSW SNS
+</header>
+
+<section>
+    <div style="text-align: center">
+        <button style="width:150px;" onclick="openNewContentDialog()">새글쓰기</button>
+    </div>
+    <div id="comments-list">
+
+    </div>
+</section>
+
+<aside style="text-align: center;">
+    <div id="user-info">
+        <div id="user-profile"></div>
+        <div id="user-name"></div>
+        <div id="user-email"></div>
+        <div id="user-terms"></div>
+        <button id="loginBtn" onclick="loginChk()">로그인</button>
+    </div>
+</aside>
+
+<div id="newContent-container">
+    <div id="newContent-container-child">
+        <h2>새글쓰기</h2>
+        <input type="file" id="upload-file">
+        <div><input id="new-content" placeholder="Comment"></div>
+        <div>
+            <button onclick="addComment()">등록</button>
+            <button onclick="closeNewContentDialog()">취소</button>
+        </div>
+    </div>
+</div>
+
+<div id="login-container">
+    <div id="login-container-child">
+        <h2>LOGIN</h2>
+        <div><input id="id" placeholder="ID"></div>
+        <div><input id="pw" placeholder="PassWord" type="password"></div>
+        <div>
+            <button onclick="getUserInfo()">로그인</button>
+            <button onclick="closeLoginDialog()">취소</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let content;
+    let userId = null;
+    let onLogin = 0;
+
+    async function getCommentList() {
+        try {
+            let response = await $.get('/list');
+
+            for (let i = 0; i < response.length; i++) {
+                let comment = response[i];
+
+                $('#comments-list').prepend(`
+                    <div id="line$e{comment.id}" class="list">
+                        <div><image id="commentImg" src='attachment/comment/${comment.id}'></image></div>
+                        <div>${comment.username}</div>
+                        <div>${comment.created}</div>
+                        <div>${comment.content}</div>
+                        <div>
+                            <button onclick="editComment(this, ${comment.id})">수정</button>
+                            <button onclick="removeComment(this, ${comment.id})">삭제</button>
+                        </div>
+                    </div>
+                `)
+            }
+        } catch (err) {
+            alert("Comment List 불러오기 실패");
+            console.log(JSON.stringify(err));
+        }
+    }
+
+    getCommentList();
+
+    async function addComment() {
+
+        let file = await $('#upload-file')[0].files[0];
+
+        if (file == null) {
+            alert("파일을 첨부해주세요");
+            return;
+        }
+
+        let formData = new FormData();
+        formData.append('srcFile', file);
+
+        let response = $.ajax({
+            type: 'POST',
+            url: '/attachment',
+            data: formData,
+            processData: false,
+            contentType: false
+        }).done(function (res) {
+            $.ajax({
+                type: 'POST',
+                url: '/insert',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    userId: 1,
+                    content: $('#new-content').val(),
+                    imgPath: res.storedPath,
+                    imgName: res.originalName
+                })
+            }).done(function (data) {
+                $('#comments-list').prepend(`
+                        <div id="line${data.id}" class="list">
+                            <div><image id="commentImg" src="/attachment/comment/${data.id}"></image></div>
+                            <div>${data.username}</div>
+                            <div>${data.created}</div>
+                            <div>${data.content}</div>
+                            <div>
+                                <button onclick="editComment(this, ${data.id})">수정</button>
+                                <button onclick="removeComment(this, ${data.id})">삭제</button>
+                            </div>
+                        </div>
+                    `)
+            }).fail(function (error){
+                console.log(error);
+                alert("게시글 등록 실패");
+            })
+
+            closeNewContentDialog();
+            $('#new-content').val("");
+            $('#upload-file').val("");
+
+            alert("파일 업로드 성공");
+        }).fail(function (err) {
+            console.log(err);
+            alert("업로드 실패");
+        });
+    }
+
+    async function editComment(button, id) {
+
+        if(onLogin == 0){
+            openLoginDialog();
+            return;
+        }
+
+        if ($(button).text() == '수정') { // 수정을 눌렀을 경우
+            let line = $(`#line${id}`);
+            content = line.find('div:nth-child(4)').html();
+
+            let inputContent = `<input value="${content}">`;
+            line.find('div:nth-child(4)').html(inputContent);
+
+            $(button).text('확인');
+            $(button).next().text('취소');
+
+        } else { // 수정을 누른 후 확인을 눌렀을 경우
+            let line = $(`#line${id}`);
+
+            let updateContent = {
+                userId: "1",
+                content: line.find('div:nth-child(4)').children().val()
+            };
+
+            let response = await $.ajax({
+                type: 'PUT',
+                url: '/update/' + id,
+                contentType: 'application/json',
+                data: JSON.stringify(updateContent)
+            });
+
+            line.find('div:nth-child(4)').html(response.content);
+
+            $(button).text('수정');
+            $(button).next().text('삭제');
+        }
+    }
+
+    async function removeComment(button, id) {
+
+        if(onLogin == 0){
+            openLoginDialog();
+            return;
+        }
+
+        if ($(button).text() == '삭제') { // 삭제를 눌렀을 경우
+            try {
+                let response = await $.ajax({
+                    type: 'DELETE',
+                    url: '/delComment/' + id,
+                    contentType: 'application/json'
+                });
+                if (response == true)
+                    $(`#line${id}`).remove();
+            } catch (err) {
+                console.log(err);
+            }
+        } else { // 수정버튼을 누른 후 취소를 눌렀을 경우
+            $(button).text('삭제');
+            $(button).prev().text('수정');
+            $(`#line${id}`).find('div:nth-child(4)').html(content)
+        }
+    }
+
+    function loginChk(){
+        if(onLogin == 0){
+            openLoginDialog();
+        } else if(onLogin == 1){
+            getUserInfo();
+        }
+    }
+
+    async function getUserInfo(){
+        if($('#loginBtn').text() == '로그인'){
+            try{
+                let response = await $.get('/findUser/' + $('#id').val());
+
+                if( response.id == $('#id').val() && response.password == $('#pw').val()){
+                    userId = $('#id').val();
+
+                    $('#user-profile').append(`<div><image id="profileImg" src='attachment/user/${response.id}'></image></div>`);
+                    $('#user-name').html(`${response.username}`);
+                    $('#user-email').html(`${response.email}`);
+                    $('#user-terms').html("가입기간");
+
+                    onLogin = 1;
+                    $('#loginBtn').text('로그아웃');
+                    closeLoginDialog();
+                } else {
+                    alert("ID나 PW가 틀렸거나 없습니다.");
+                    return;
+                }
+            } catch (err) {
+                console.log(err);
+                alert('로그인실패')
+                closeLoginDialog();
+            }
+
+        } else if($('#loginBtn').text() == '로그아웃'){
+            console.log("logout");
+            userId = null;
+            onLogin = 0;
+            
+            $('#user-profile').html("");
+            $('#user-name').html("");
+            $('#user-email').html("");
+            $('#user-terms').html("");
+            $('#loginBtn').text('로그인');
+        }
+    }
+
+    function openNewContentDialog() {
+
+        if(onLogin == 0){
+            openLoginDialog();
+            return;
+        }
+        $('#newContent-container').css('display', 'flex');
+    }
+
+    function closeNewContentDialog() {
+        $('#newContent-container').hide();
+    }
+
+    function openLoginDialog() {
+        $('#login-container').css('display', 'flex');
+    }
+
+    function closeLoginDialog() {
+        $('#login-container').hide();
+    }
+
+</script>
+</body>
+</html>

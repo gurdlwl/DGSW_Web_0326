@@ -25,7 +25,7 @@ public class CommentServiceImpl implements CommentService {
 
     @PostConstruct
     private void init() {
-        User u = this.userRepository.save(new User("aaa", "aaa@dgsw.hs.kr"));
+        User u = this.userRepository.save(new User("aaa", "aaa@dgsw.hs.kr", "1234"));
     }
 
     @Override
