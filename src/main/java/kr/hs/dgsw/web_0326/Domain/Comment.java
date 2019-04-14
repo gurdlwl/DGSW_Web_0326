@@ -24,11 +24,19 @@ public class Comment {
     @UpdateTimestamp
     private LocalDateTime modified;
 
-    //public Comment() {}
+    private String imgPath;
+    private String imgName;
 
     public Comment(Long userId, String content){
         this.userId = userId;
         this.content = content;
+    }
+
+    public Comment(Long userId, String content, String imgPath, String imgName){
+        this.userId = userId;
+        this.content = content;
+        this.imgPath = imgPath;
+        this.imgName = imgName;
     }
 
     public Comment(Comment c){
@@ -37,6 +45,8 @@ public class Comment {
         this.content = c.getContent();
         this.created = c.getCreated();
         this.modified = c.getModified();
+        this.imgName = c.getImgName();
+        this.imgPath = c.getImgPath();
     }
 
     public Long getId() {
@@ -77,5 +87,21 @@ public class Comment {
 
     public void setModified(LocalDateTime modified) {
         this.modified = modified;
+    }
+
+    public String getImgPath() {
+        return imgPath;
+    }
+
+    public void setImgPath(String imgPath) {
+        this.imgPath = imgPath;
+    }
+
+    public String getImgName() {
+        return imgName;
+    }
+
+    public void setImgName(String imgName) {
+        this.imgName = imgName;
     }
 }

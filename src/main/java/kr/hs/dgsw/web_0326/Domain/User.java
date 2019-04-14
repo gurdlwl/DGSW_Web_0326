@@ -19,27 +19,12 @@ public class User {
 
     private String username;
     private String email;
+    private String password;
 
     @CreationTimestamp
     private LocalDateTime joined;
     @UpdateTimestamp
     private LocalDateTime modified;
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
-    }
-
-    public String getFilename() {
-        return filename;
-    }
-
-    public void setFilename(String filename) {
-        this.filename = filename;
-    }
 
     private String path;
     private String filename;
@@ -73,6 +58,14 @@ public class User {
         this.email = email;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public LocalDateTime getJoined() {
         return joined;
     }
@@ -88,4 +81,21 @@ public class User {
     public void setModified(LocalDateTime modified) {
         this.modified = modified;
     }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
+    }
+
 }

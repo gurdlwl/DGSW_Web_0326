@@ -1,6 +1,7 @@
 package kr.hs.dgsw.web_0326.Service;
 
 import kr.hs.dgsw.web_0326.Domain.Comment;
+import kr.hs.dgsw.web_0326.Protocol.AttachmentProtocol;
 import kr.hs.dgsw.web_0326.Protocol.CommentUsernameProtocol;
 
 import java.util.List;
@@ -11,4 +12,5 @@ public interface CommentService {
     CommentUsernameProtocol addComment(Comment comment);
     List<CommentUsernameProtocol> viewByUserId(Long id);
     boolean delComment(Long id);
+    AttachmentProtocol getCommentImgById(long id);
 }

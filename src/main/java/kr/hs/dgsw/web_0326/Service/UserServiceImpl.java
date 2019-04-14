@@ -1,6 +1,7 @@
 package kr.hs.dgsw.web_0326.Service;
 
 import kr.hs.dgsw.web_0326.Domain.User;
+import kr.hs.dgsw.web_0326.Protocol.AttachmentProtocol;
 import kr.hs.dgsw.web_0326.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -55,5 +56,15 @@ public class UserServiceImpl implements UserService {
         } catch (Exception e){
             return false;
         }
+    }
+
+    @Override
+    public AttachmentProtocol getUserImgById(Long id) {
+        return this.userRepository.findById(id)
+                .map(found -> new AttachmentProtocol(
+                        found.getPath(),
+                        found.getFilename()
+                ))
+                .orElse(null);
     }
 }
